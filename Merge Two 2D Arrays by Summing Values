@@ -1,0 +1,13 @@
+class Solution:
+    def mergeArrays(self, nums1: List[List[int]], nums2: List[List[int]]) -> List[List[int]]:
+        result_dict = {}
+        
+        for id, val in nums1:
+            result_dict[id] = result_dict.get(id, 0) + val
+        
+        for id, val in nums2:
+            result_dict[id] = result_dict.get(id, 0) + val
+        
+        result = [[id, val] for id, val in sorted(result_dict.items())]
+        
+        return result
