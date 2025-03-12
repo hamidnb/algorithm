@@ -1,0 +1,12 @@
+from typing import List
+import bisect
+
+class Solution:
+    def maximumCount(self, nums: List[int]) -> int:
+        pos_start = bisect.bisect_right(nums, 0)
+        neg_end = bisect.bisect_left(nums, 0) - 1
+        pos_count = len(nums) - pos_start
+        neg_count = neg_end + 1
+        return max(pos_count, neg_count)
+
+#ms 0
