@@ -1,0 +1,23 @@
+from typing import List
+
+class Solution:
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+        if not matrix or not matrix[0]:
+            return 0
+        
+        max_area = 0
+        hist = [0] * (len(matrix[0]) + 1)
+        for row in matrix:
+            for i, v in enumerate(row):
+                hist[i] = hist[i] + 1 if row[i] == '1' else 0
+            
+            stack = [-1]
+            for i, h in enumerate(hist):
+                while hist[stack[-1]] > h:
+                    height = hist[stack.pop()]
+                    width = i - stack[-1] - 1
+                    max_area = max(max_area, height * width)
+                stack.append(i)
+        
+        return max_area
+#31 ms 
