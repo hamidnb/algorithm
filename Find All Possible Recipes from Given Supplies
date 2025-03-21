@@ -1,0 +1,27 @@
+class Solution:
+    def findAllRecipes(self, recipes: List[str], ingredients: List[List[str]], supplies: List[str]) -> List[str]:
+        from collections import defaultdict, deque
+        
+        graph = defaultdict(list)
+        indegree = {recipe: 0 for recipe in recipes}
+        supplies_set = set(supplies)
+        result = []
+        
+        for i, recipe in enumerate(recipes):
+            for ingredient in ingredients[i]:
+                if ingredient not in supplies_set:
+                    graph[ingredient].append(recipe)
+                    indegree[recipe] += 1
+        
+        queue = deque([recipe for recipe in recipes if indegree[recipe] == 0])
+        
+        while queue:
+            recipe = queue.popleft()
+            result.append(recipe)
+            for dependent in graph[recipe]:
+                indegree[dependent] -= 1
+                if indegree[dependent] == 0:
+                    queue.append(dependent)
+        
+        return result
+# 20 ms
