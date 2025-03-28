@@ -1,0 +1,28 @@
+import heapq
+from typing import List
+
+class Solution:
+    def maxPoints(self, grid: List[List[int]], queries: List[int]) -> List[int]:
+        m, n = len(grid), len(grid[0])
+        result = [0] * len(queries)
+        queries_with_index = [(val, idx) for idx, val in enumerate(queries)]
+        queries_with_index.sort()
+
+        visited = [[False] * n for _ in range(m)]
+        min_heap = [(grid[0][0], 0, 0)]  # (value, row, column)
+        visited[0][0] = True
+
+        points = 0
+        for query_value, query_index in queries_with_index:
+            while min_heap and min_heap[0][0] < query_value:
+                val, x, y = heapq.heappop(min_heap)
+                points += 1
+                for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                    nx, ny = x + dx, y + dy
+                    if 0 <= nx < m and 0 <= ny < n and not visited[nx][ny]:
+                        heapq.heappush(min_heap, (grid[nx][ny], nx, ny))
+                        visited[nx][ny] = True
+            result[query_index] = points
+
+        return result
+#411 ms
